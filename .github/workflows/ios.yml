@@ -1,0 +1,40 @@
+# Gera o Telao.ipa (sem assinatura) num Mac da nuvem do GitHub. O desenvolvimento é no
+# Windows; o .ipa é instalado no iPad pelo iloader/Sideloadly, que assina com o ID Apple
+# do dono do aparelho. Rode em Actions → "iOS" → Run workflow, ou a cada push na main.
+name: iOS
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  ipa:
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+          xcodebuild -version
+      - name: XcodeGen
+        run: brew install xcodegen && xcodegen generate
+      - name: Build para iPad/iPhone (Release, sem assinar)
+        run: |
+          set -o pipefail
+          xcodebuild build -project Telao.xcodeproj -scheme Telao -configuration Release -derivedDataPath dd \
+            -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            2>&1 | tee build.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" build.log
+      - name: Erros
+        if: failure()
+        run: grep -E "error:" build.log | sort -u | head -100
+      - name: Montar o .ipa
+        run: |
+          mkdir -p Payload
+          cp -R dd/Build/Products/Release-iphoneos/*.app Payload/
+          zip -qry Telao.ipa Payload
+          ls -la Telao.ipa
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Telao-ipa
+          path: Telao.ipa
