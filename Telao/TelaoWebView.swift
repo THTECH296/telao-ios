@@ -7,7 +7,7 @@ import WebKit
 ///   Os players continuam livres dentro dos iframes.
 /// - Vídeo em linha, tela cheia de elemento e picture-in-picture ligados.
 struct TelaoWebView: UIViewRepresentable {
-    static let endereco = URL(string: "https://devlumo.com.br/telao/")!
+    static let endereco = URL(string: "https://telao.devlumo.com.br/")!
     static let hostPermitido = "devlumo.com.br"
 
     @Binding var carregou: Bool

@@ -1,7 +1,7 @@
 # Telão · iPad
 
 App iOS do Telão, feito para o **iPad** (também roda no iPhone). Abre
-`https://devlumo.com.br/telao/` em tela cheia num `WKWebView`, com o layout de app do site
+`https://telao.devlumo.com.br/` em tela cheia num `WKWebView`, com o layout de app do site
 (tela de toque até 1400px) e o que o navegador sozinho não faz:
 
 - bloqueia as janelas de anúncio que os players abrem ao tocar no play;
