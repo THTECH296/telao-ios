@@ -54,12 +54,15 @@ struct Abertura: View {
     var body: some View {
         VStack(spacing: 22) {
             Text("TELÃO")
-                .font(.system(size: 64, weight: .black, design: .default).width(.condensed))
-                .tracking(1)
+                .font(.system(size: 60, weight: .heavy, design: .default))
+                .tracking(-1)
                 .foregroundStyle(Color(red: 0.898, green: 0.035, blue: 0.078))
                 .shadow(color: Color(red: 0.898, green: 0.035, blue: 0.078).opacity(0.45), radius: pulsar ? 26 : 10)
             ProgressView()
+                .controlSize(.regular)
                 .tint(.white.opacity(0.6))
+                .padding(14)
+                .background(.ultraThinMaterial, in: Circle())
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) { pulsar = true }
